@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHRISTMAS MESSAGE GENERATOR</title>
+    <style>
+  body {
+    background-color: #ed2b3b;      /* white background */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container {
+    text-align: center;
+    max-width: 600px;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    color: #d42426;              /* Christmas red */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 30px;
+  }
+  
+  button {
+    background-color: #d42426;
+    color: white;
+    font-size: 18px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #a81c1e;
+    transform: scale(1.05);
+  }
+  
+  /* Optional: Add a Christmas touch */
+  h1::after {
+    content: " 🎄";
+    color: #18c658;
+  }
+  #message {
+  margin-top: 20px;
+  font-size: 1.3em;
+  transition: opacity 0.5s ease;
+  white-space: pre-line;
+}
+
+/* Snow effect */
+.snow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image:
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 2px, transparent 2px);
+  background-size: 100px 100px, 150px 150px, 200px 200px;
+  animation: snow 10s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes snow {
+  0% { background-position: 0 0, 0 0, 0 0; }
+  100% { background-position: 0 100vh, 0 200vh, 0 300vh; }
+}
+
+</style>
+</head>
+<body>
+    <div class="snow"></div>
+    <div class="container">
+    <div id="img">
+    <img src="santa.png" height="200vh">
+    </div>
+    <div class="headings">
+    <h1 id="head1">Santa’s Little Mood Booster 🎄</h1>
+    <h3 id="head2">Built with ❤️ during exams & Christmas week</h3>
+    <button type="button" id="myButton" class="mood-button">
+  Get a Christmas Message 🎅</button>
+    <div id="message"></div>
+ <script>
+  // This line is just to confirm JS is connected
+  console.log("JavaScript is working 🎄");
+
+  // Step 1: Select button and message area from HTML
+  const button = document.getElementById("myButton");
+  const messageBox = document.getElementById("message");
+
+  // Step 2: Function to give greeting based on time
+  function getGreeting() {
+    const hour = new Date().getHours(); // gets current hour (0–23)
+
+    if (hour < 12) {
+      return "Good Morning ☀️";
+    } else if (hour < 17) {
+      return "Good Afternoon 🌤";
+    } else if (hour < 21) {
+      return "Good Evening 🌆";
+    } else {
+      return "Good Night 🌙";
+    }
+  }
+
+  // Step 3: Function to return random Christmas emoji
+  function randomEmoji() {
+    const emojis = ["🎄", "🎅", "🎁", "❄️", "☃️", "✨"];
+    const randomIndex = Math.floor(Math.random() * emojis.length);
+    return emojis[randomIndex];
+  }
+
+  // Step 4: When button is clicked
+  button.addEventListener("click", async () => {
+
+    // Show loading message
+    messageBox.innerText = "Santa is thinking... 🎅✨";
+
+    try {
+      // Step 5: Fetch data from API
+      const response = await fetch("https://api.adviceslip.com/advice");
+
+      // Convert API response into JSON
+      const data = await response.json();
+
+      // Step 6: Get greeting & emoji
+      const greeting = getGreeting();
+      const emoji = randomEmoji();
+
+      // Step 7: Show final message
+      messageBox.innerText =
+        `${greeting} ${emoji}\n\n${data.slip.advice}`;
+
+    } catch (error) {
+      // If API fails
+      messageBox.innerText = "Oops! Santa is busy right now 😅";
+    }
+  });
+</script>
+
+</body>
+</html>
